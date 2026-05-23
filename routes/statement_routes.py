@@ -185,3 +185,41 @@ class StatementTransactions(Resource):
 
         except Exception as e:
             return {"message": str(e)}, 500
+@stmt_ns.route("/<string:stmt_id>/anomalies")
+class StatementAnomalies(Resource):
+    @token_required
+    def get(self, stmt_id):
+        """Get flagged anomalous transactions"""
+        try:
+            stmt = get_statement(stmt_id)
+            if not stmt:
+                return {"message": "Not found"}, 404
+            if stmt["user_id"] != request.uid:
+                return {"message": "Unauthorized"}, 403
+
+            txns = get_transactions(stmt_id)
+
+            # Filter only anomalies
+            anomalies = [
+                t for t in txns
+                if t.get("is_anomaly") == True
+            ]
+
+            return {
+                "statement_id":  stmt_id,
+                "total_anomalies": len(anomalies),
+                "anomalies": [
+                    {
+                        "date":        a["date"],
+                        "description": a["description"],
+                        "amount":      a["amount"],
+                        "type":        a["type"],
+                        "reason":      a.get("anomaly_reason",""),
+                        "score":       a.get("anomaly_score", 0),
+                    }
+                    for a in anomalies
+                ]
+            }, 200
+
+        except Exception as e:
+            return {"message": str(e)}, 500

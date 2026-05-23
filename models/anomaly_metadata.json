@@ -1,0 +1,15 @@
+{
+  "amount_mean": 21328.639160829673,
+  "amount_std": 61815.739222161006,
+  "contamination": 0.05,
+  "features": [
+    "amount_zscore",
+    "amount_log",
+    "hour",
+    "is_late_night",
+    "day_of_week",
+    "is_weekend",
+    "amount_category"
+  ],
+  "version": "1.0"
+}
