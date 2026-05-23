@@ -8,3 +8,8 @@ serviceAccountKey.json
 .DS_Store
 instance/
 *.pkl
+models/*.pkl
+
+models/*.pkl
+
+ml/__pycache__/
