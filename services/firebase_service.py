@@ -3,11 +3,6 @@ from datetime import datetime
 import uuid
 
 db = firestore.client()
-
-# ════════════════════════════
-#   USER OPERATIONS
-# ════════════════════════════
-
 def create_user(uid, email, name):
     """Save new user to Firestore"""
     db.collection("users").document(uid).set({
@@ -25,11 +20,6 @@ def get_user(uid):
     if doc.exists:
         return doc.to_dict()
     return None
-
-# ════════════════════════════
-#   STATEMENT OPERATIONS
-# ════════════════════════════
-
 def save_statement(user_id, bank_name, transactions_count):
     """Create statement record in Firestore"""
     stmt_id = str(uuid.uuid4())
@@ -77,10 +67,6 @@ def save_transactions(stmt_id, user_id, df):
         })
     batch.commit()
     return True
-
-# ════════════════════════════
-#   STORAGE OPERATIONS
-# ════════════════════════════
 
 def upload_to_storage(file_path, user_id, filename):
     """Upload file to Firebase Storage"""
