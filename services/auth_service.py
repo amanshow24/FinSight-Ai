@@ -3,8 +3,6 @@ import os
 from datetime import datetime, timedelta
 from functools import wraps
 from flask import request
-
-# Simple string — NOT related to Firebase key
 JWT_SECRET   = "finsense_jwt_simple_secret_2026"
 EXPIRY_HOURS = 24
 
