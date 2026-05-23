@@ -6,7 +6,6 @@ from services.firebase_service import create_user, get_user
 
 auth_ns = Namespace("auth", description="Authentication")
 
-# ── Request Models (for Swagger docs) ──
 register_model = auth_ns.model("Register", {
     "email":    fields.String(required=True, example="user@gmail.com"),
     "password": fields.String(required=True, example="password123"),
@@ -18,10 +17,6 @@ login_model = auth_ns.model("Login", {
     "password": fields.String(required=True, example="password123"),
 })
 
-
-# ════════════════════════════
-#   REGISTER
-# ════════════════════════════
 @auth_ns.route("/register")
 class Register(Resource):
     @auth_ns.expect(register_model)
@@ -36,17 +31,17 @@ class Register(Resource):
             return {"message": "Email, password and name required"}, 400
 
         try:
-            # Create user in Firebase Auth
+            
             user = firebase_auth.create_user(
                 email=email,
                 password=password,
                 display_name=name
             )
 
-            # Save to Firestore
+            
             create_user(user.uid, email, name)
 
-            # Generate JWT
+            
             token = generate_token(user.uid, email)
 
             return {
@@ -61,10 +56,6 @@ class Register(Resource):
         except Exception as e:
             return {"message": str(e)}, 500
 
-
-# ════════════════════════════
-#   LOGIN
-# ════════════════════════════
 @auth_ns.route("/login")
 class Login(Resource):
     @auth_ns.expect(login_model)
@@ -77,11 +68,9 @@ class Login(Resource):
             return {"message": "Email required"}, 400
 
         try:
-            # Get user from Firebase
+         
             user  = firebase_auth.get_user_by_email(email)
             token = generate_token(user.uid, email)
-
-            # Get user data from Firestore
             user_data = get_user(user.uid)
 
             return {
