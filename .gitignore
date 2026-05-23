@@ -3,5 +3,8 @@ __pycache__/
 *.pyc
 .env
 serviceAccountKey.json
-*.pkl
+*.pdf
+*.csv
 .DS_Store
+instance/
+*.pkl
